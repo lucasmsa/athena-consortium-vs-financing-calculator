@@ -14,7 +14,6 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
-        "max-width": "1280px",
       },
     },
     extend: {
@@ -52,7 +51,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        darkBlue: "#0f1323",
+        "dark-blue": "#0f1323",
         cantaloupe: "#e7b99e",
         "cantaloupe-dark": "#8a5752",
         "cantaloupe-medium": "#ae6b60",
@@ -75,6 +74,12 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      width: {
+        "max-width": "1280px",
+      },
+      screens: {
+        mobile: "500px",
       },
     },
   },
