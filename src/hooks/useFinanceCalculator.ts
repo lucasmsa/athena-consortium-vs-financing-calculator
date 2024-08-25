@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-  ChangeEvent,
-} from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import {
   ChartDataInstallments,
   ChartDataTotal,

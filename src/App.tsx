@@ -140,7 +140,7 @@ function App() {
               wrapperStyle={{
                 fontSize: "14px",
                 color: "#fff",
-                marginLeft: 50,
+                marginLeft: 40,
               }}
               content={<ChartLegendContent />}
             />
@@ -188,7 +188,7 @@ function App() {
               wrapperStyle={{
                 fontSize: "14px",
                 color: "#fff",
-                marginLeft: 50,
+                marginLeft: 40,
               }}
               content={<ChartLegendContent />}
             />
