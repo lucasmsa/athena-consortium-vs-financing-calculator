@@ -2,19 +2,19 @@ import { ChartConfig } from "@/components/ui/chart";
 
 export const chartConfig = {
   sac: {
-    label: "sac",
-    color: "#4f83cc", // Royal blue, elegant but softer.
+    label: "SAC",
+    color: "#4f83cc",
   },
   consorcio: {
-    label: "consorcio",
-    color: "#6db9d9", // A lighter blue-green, with a refreshing tone.
+    label: "Consórcio",
+    color: "#6db9d9",
   },
   valorDoBem: {
-    label: "valorDoBem",
-    color: "#e7b99e", // Cantaloupe, tying into the existing aesthetic.
+    label: "Valor do Bem",
+    color: "#e7b99e",
   },
   price: {
-    label: "price",
-    color: "#66d1b2", // Light green, to add a contrasting fresh touch.
+    label: "Price",
+    color: "#66d1b2",
   },
 } satisfies ChartConfig;

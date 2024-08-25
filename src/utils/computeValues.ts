@@ -79,3 +79,5 @@ export const computeValues = ({
     chartDataInstallments,
   };
 };
+
+const prependReais = (value: number) => `R$ ${value.toFixed(3)}`;
