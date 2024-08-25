@@ -3,4 +3,5 @@ export const itemNameMatcher = {
   sac: "SAC",
   consorcio: "Consórcio",
   valorDoBem: "Valor do Bem",
+  parcela: "Parcela",
 };

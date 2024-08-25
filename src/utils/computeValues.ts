@@ -27,11 +27,42 @@ export const computeValues = ({
   chartDataTotal: ChartDataTotal[];
   chartDataInstallments: ChartDataInstallments[];
 } => {
-  // Consortium: administration fee of 23% + annual readjustment of 2%
-  const consortiumTotal =
-    neededValue * 1.23 * Math.pow(1.02, financingTerm / 12);
+  const administrationFeeRate = 0.23;
+  const annualAdjustmentRate = 1.02;
+  const consortiumTerm = 180;
 
-  // Price Financing: constant installments
+  const adjustedNeededValue = neededValue;
+  const administrationFee = neededValue * administrationFeeRate;
+  let remainingDebt = adjustedNeededValue;
+  let remainingAdminDebt = administrationFee;
+
+  const monthlyConsortiumInstallments: number[] = [];
+  let consorcioTotal = 0;
+
+  // Calculate consortium installments with adjustments
+  for (let i = 0; i < consortiumTerm; i++) {
+    if (i % 12 === 0 && i !== 0) {
+      remainingDebt *= annualAdjustmentRate;
+      remainingAdminDebt *= annualAdjustmentRate;
+    }
+
+    const parcelaMensalImovel = remainingDebt / (consortiumTerm - i);
+    const parcelaMensalAdmin = remainingAdminDebt / (consortiumTerm - i);
+
+    const parcelaMensal = parcelaMensalImovel + parcelaMensalAdmin;
+
+    monthlyConsortiumInstallments.push(parcelaMensal);
+    consorcioTotal += parcelaMensal;
+
+    remainingDebt -= parcelaMensalImovel;
+    remainingAdminDebt -= parcelaMensalAdmin;
+  }
+
+  // After consortiumTerm, consortium payments are 0
+  for (let i = consortiumTerm; i < financingTerm; i++) {
+    monthlyConsortiumInstallments.push(0); // No more consortium payments
+  }
+
   const monthlyInterest = financingInterest / 100 / 12;
   const priceMonthly =
     (neededValue *
@@ -41,36 +72,35 @@ export const computeValues = ({
 
   const priceTotal = priceMonthly * financingTerm;
 
-  // SAC financing: decreasing installments
-  const amortizacao = neededValue / financingTerm;
-
+  const amortization = neededValue / financingTerm;
   let sacTotal = 0;
   const sacInstallments: number[] = [];
 
-  // Compute SAC Installments
+  // Calculate SAC installments for the entire financing term
   for (let i = 0; i < financingTerm; i++) {
-    const saldoDevedor = neededValue - i * amortizacao;
-    const parcelaSAC = amortizacao + saldoDevedor * monthlyInterest;
+    const saldoDevedor = neededValue - i * amortization;
+    const parcelaSAC = amortization + saldoDevedor * monthlyInterest;
     sacInstallments.push(parcelaSAC);
     sacTotal += parcelaSAC;
   }
 
-  // Data for the totals chart
+  // Prepare chart data for totals
   const chartDataTotal = [
     { label: "Valor do Bem", valorDoBem: neededValue },
-    { label: "Consórcio", consorcio: consortiumTotal },
+    { label: "Consórcio", consorcio: consorcioTotal },
     { label: "Price", price: priceTotal },
     { label: "SAC", sac: sacTotal },
   ];
 
-  // Compute installments of consortium and Price
+  // Create chart data for installments
   const chartDataInstallments = Array.from(
     { length: financingTerm },
     (_, i) => ({
-      month: `Parcela ${i + 1}`,
-      sac: sacInstallments[i],
-      consorcio: consortiumTotal / financingTerm,
+      parcela: i + 1,
       price: priceMonthly,
+      month: `Parcela ${i + 1}`,
+      sac: sacInstallments[i] || 0,
+      consorcio: monthlyConsortiumInstallments[i] || 0,
     })
   );
 
@@ -79,5 +109,3 @@ export const computeValues = ({
     chartDataInstallments,
   };
 };
-
-const prependReais = (value: number) => `R$ ${value.toFixed(3)}`;

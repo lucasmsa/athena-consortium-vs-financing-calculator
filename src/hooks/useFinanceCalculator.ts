@@ -14,6 +14,7 @@ import {
 interface UseFinanceCalculator {
   entryValue: number;
   neededValue: number;
+  collapseOpen: boolean;
   financingTerm: number;
   financingInterest: number;
   chartDataTotal: ChartDataTotal[];
@@ -21,6 +22,7 @@ interface UseFinanceCalculator {
   handleInputChange: (
     setter: Dispatch<SetStateAction<number>>
   ) => (e: ChangeEvent<HTMLInputElement>) => void;
+  setCollapseOpen: Dispatch<SetStateAction<boolean>>;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setEntryValue: Dispatch<SetStateAction<number>>;
   setNeededValue: Dispatch<SetStateAction<number>>;
@@ -29,6 +31,7 @@ interface UseFinanceCalculator {
 }
 
 export const useFinanceCalculator = (): UseFinanceCalculator => {
+  const [collapseOpen, setCollapseOpen] = useState(false);
   const [entryValue, setEntryValue] = useState(10000);
   const [neededValue, setNeededValue] = useState(100000);
   const [financingTerm, setFinancingTerm] = useState(120);
@@ -38,7 +41,6 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
     ChartDataInstallments[]
   >([]);
 
-  // Function to compute and update chart data when inputs change
   const updateChartData = () => {
     const { chartDataTotal, chartDataInstallments } = computeValues({
       neededValue,
@@ -57,15 +59,9 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
   const handleInputChange =
     (setter: Dispatch<SetStateAction<number>>) =>
     (e: ChangeEvent<HTMLInputElement>) => {
-      // Remove the "R$" prefix before validating the value
-      const value = parseFloat(e.target.value.replace("R$", "").trim());
+      const rawValue = e.target.value;
 
-      // Validate the value and set it appropriately
-      if (!isNaN(value)) {
-        setter(value);
-      } else {
-        setter(0); // Default or fallback value if the input is invalid
-      }
+      setter(rawValue ? parseFloat(rawValue) : 0.0);
     };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -74,6 +70,8 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
   };
 
   return {
+    collapseOpen,
+    setCollapseOpen,
     entryValue,
     neededValue,
     financingTerm,

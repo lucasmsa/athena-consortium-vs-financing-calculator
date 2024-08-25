@@ -79,7 +79,8 @@ module.exports = {
         "max-width": "1280px",
       },
       screens: {
-        mobile: "500px",
+        mobile: "650px",
+        tablet: "1000px",
       },
     },
   },
