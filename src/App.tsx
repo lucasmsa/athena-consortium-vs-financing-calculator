@@ -23,6 +23,7 @@ import AthenaLogoMini from "@/assets/athena-logo-mini.png";
 import { useFinanceCalculator } from "./hooks/useFinanceCalculator";
 import { CustomTooltip } from "./components/CustomTooltip/CustomTooltip";
 import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
+import { formatToFloat } from "./utils/formatToFloat";
 
 function App() {
   const {
@@ -64,12 +65,11 @@ function App() {
           placeholder="R$ 0,00"
           prefix="R$ "
           thousandSeparator="."
-          onChange={handleInputChange(setEntryValue)}
+          onValueChange={handleInputChange(setEntryValue)}
         />
         <label className="text-white mt-4 font-bold">Valor Necessário</label>
         <NumericFormat
           value={neededValue}
-          onChange={handleInputChange(setNeededValue)}
           prefix="R$ "
           decimalScale={2}
           fixedDecimalScale
@@ -77,17 +77,16 @@ function App() {
           decimalSeparator=","
           placeholder="R$ 0,00"
           thousandSeparator="."
+          onValueChange={handleInputChange(setNeededValue)}
         />
         <label className="text-white mt-4 font-bold">
           Prazo de Financiamento (em Meses)
         </label>
         <NumericFormat
-          decimalScale={2}
-          fixedDecimalScale
+          inputMode="numeric"
           customInput={Input}
-          decimalSeparator=","
           value={financingTerm}
-          onChange={handleInputChange(setFinancingTerm)}
+          onValueChange={handleInputChange(setFinancingTerm)}
         />
         <label className="text-white mt-4 font-bold">
           Juros de Financiamento por ano (%)
@@ -98,7 +97,7 @@ function App() {
           customInput={Input}
           decimalSeparator=","
           value={financingInterest}
-          onChange={handleInputChange(setFinancingInterest)}
+          onValueChange={handleInputChange(setFinancingInterest)}
         />
         <Button
           type="submit"
@@ -108,9 +107,12 @@ function App() {
         </Button>
       </form>
 
-      <section className="w-[900px] max-tablet:w-[600px] max-mobile:w-[300px] items-center flex flex-col mx-auto text-center mb-16 mt-16">
+      <section className="w-[1100px] max-tablet:w-[600px] max-mobile:w-[300px] items-center flex flex-col mx-auto text-center mb-16 mt-16">
         <h1 className="text-white text-3xl mb-8">Comparativo dos casos</h1>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="h-[300px] w-full mobile:pr-[110px] max-mobile:mr-[100px]"
+        >
           <BarChart accessibilityLayer data={chartDataTotal}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
@@ -118,16 +120,28 @@ function App() {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              tick={{ fontSize: "10px" }}
               style={{ fontSize: "14px", fill: "#fff" }}
             />
-            <YAxis style={{ fontSize: "14px", fill: "#fff" }} />
+            <YAxis
+              tickFormatter={formatToFloat}
+              style={{ fontSize: "12px", fill: "#fff", overflow: "visible" }}
+              tick={{ fontSize: "10px", overflow: "visible" }}
+              allowDecimals={false}
+              minTickGap={10}
+              width={110}
+            />
             <Tooltip
               content={<CustomTooltip />}
               cursor={{ fill: "rgba(255, 255, 255, 0.1)" }}
               wrapperStyle={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
             />
             <Legend
-              wrapperStyle={{ fontSize: "16px", color: "#fff" }}
+              wrapperStyle={{
+                fontSize: "14px",
+                color: "#fff",
+                marginLeft: 50,
+              }}
               content={<ChartLegendContent />}
             />
             <Bar
@@ -144,7 +158,10 @@ function App() {
         <h1 className="text-white text-3xl mt-16 mb-10">
           Valores das Parcelas
         </h1>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="h-[300px] w-full mobile:pr-[110px] max-mobile:mr-[110px]"
+        >
           <BarChart accessibilityLayer data={chartDataInstallments}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
@@ -155,13 +172,24 @@ function App() {
               style={{ fontSize: "14px", fill: "#fff" }}
               interval={Math.floor(chartDataInstallments.length / 2.5)}
             />
-            <YAxis style={{ fontSize: "14px", fill: "#fff" }} />
+            <YAxis
+              tickFormatter={formatToFloat}
+              style={{ fontSize: "12px", fill: "#fff" }}
+              tick={{ fontSize: "12px" }}
+              allowDecimals={false}
+              minTickGap={10}
+              width={110}
+            />
             <Tooltip
               content={<CustomTooltip />}
               wrapperStyle={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
             />
             <Legend
-              wrapperStyle={{ fontSize: "16px", color: "#fff" }}
+              wrapperStyle={{
+                fontSize: "14px",
+                color: "#fff",
+                marginLeft: 50,
+              }}
               content={<ChartLegendContent />}
             />
             <Bar dataKey="sac" fill="var(--color-sac)" radius={2} />

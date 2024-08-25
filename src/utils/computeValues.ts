@@ -1,5 +1,6 @@
 interface ComputeValues {
-  neededValue: number;
+  neededValue: number; // This represents the total value of the property.
+  entryValue: number; // This represents the initial entry payment.
   financingTerm: number;
   financingInterest: number;
 }
@@ -21,6 +22,7 @@ export interface ChartDataInstallments {
 
 export const computeValues = ({
   neededValue,
+  entryValue,
   financingTerm,
   financingInterest,
 }: ComputeValues): {
@@ -31,7 +33,9 @@ export const computeValues = ({
   const annualAdjustmentRate = 1.02;
   const consortiumTerm = 180;
 
-  const adjustedNeededValue = neededValue;
+  // Subtract the entry value from the needed value to get the financed value.
+  const financedValue = neededValue - entryValue;
+  const adjustedNeededValue = financedValue; // This is the value you are financing.
   const administrationFee = neededValue * administrationFeeRate;
   let remainingDebt = adjustedNeededValue;
   let remainingAdminDebt = administrationFee;
@@ -65,32 +69,40 @@ export const computeValues = ({
 
   const monthlyInterest = financingInterest / 100 / 12;
   const priceMonthly =
-    (neededValue *
+    (financedValue *
       monthlyInterest *
       Math.pow(1 + monthlyInterest, financingTerm)) /
     (Math.pow(1 + monthlyInterest, financingTerm) - 1);
 
   const priceTotal = priceMonthly * financingTerm;
 
-  const amortization = neededValue / financingTerm;
+  const amortization = financedValue / financingTerm;
   let sacTotal = 0;
   const sacInstallments: number[] = [];
 
   // Calculate SAC installments for the entire financing term
   for (let i = 0; i < financingTerm; i++) {
-    const saldoDevedor = neededValue - i * amortization;
+    const saldoDevedor = financedValue - i * amortization;
     const parcelaSAC = amortization + saldoDevedor * monthlyInterest;
     sacInstallments.push(parcelaSAC);
     sacTotal += parcelaSAC;
   }
 
   // Prepare chart data for totals
-  const chartDataTotal = [
+  let chartDataTotal = [
     { label: "Valor do Bem", valorDoBem: neededValue },
-    { label: "Consórcio", consorcio: consorcioTotal },
-    { label: "Price", price: priceTotal },
-    { label: "SAC", sac: sacTotal },
+    { label: "Consórcio", consorcio: consorcioTotal + entryValue },
+    { label: "Price", price: priceTotal + entryValue },
+    { label: "SAC", sac: sacTotal + entryValue },
   ];
+
+  chartDataTotal = chartDataTotal.filter(
+    (item) =>
+      (item.valorDoBem === undefined || item.valorDoBem >= 0) &&
+      (item.consorcio === undefined || item.consorcio >= 0) &&
+      (item.price === undefined || item.price >= 0) &&
+      (item.sac === undefined || item.sac >= 0)
+  );
 
   // Create chart data for installments
   const chartDataInstallments = Array.from(

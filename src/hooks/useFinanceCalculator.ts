@@ -10,6 +10,7 @@ import {
   ChartDataTotal,
   computeValues,
 } from "../utils/computeValues";
+import { NumberFormatValues } from "react-number-format";
 
 interface UseFinanceCalculator {
   entryValue: number;
@@ -21,7 +22,7 @@ interface UseFinanceCalculator {
   chartDataInstallments: ChartDataInstallments[];
   handleInputChange: (
     setter: Dispatch<SetStateAction<number>>
-  ) => (e: ChangeEvent<HTMLInputElement>) => void;
+  ) => (value: NumberFormatValues) => void;
   setCollapseOpen: Dispatch<SetStateAction<boolean>>;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setEntryValue: Dispatch<SetStateAction<number>>;
@@ -43,6 +44,7 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
 
   const updateChartData = () => {
     const { chartDataTotal, chartDataInstallments } = computeValues({
+      entryValue,
       neededValue,
       financingTerm,
       financingInterest,
@@ -58,10 +60,10 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
 
   const handleInputChange =
     (setter: Dispatch<SetStateAction<number>>) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const rawValue = e.target.value;
+    (value: NumberFormatValues) => {
+      const { floatValue } = value;
 
-      setter(rawValue ? parseFloat(rawValue) : 0.0);
+      setter(floatValue || 0.0);
     };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
