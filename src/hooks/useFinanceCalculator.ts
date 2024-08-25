@@ -57,12 +57,14 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
   const handleInputChange =
     (setter: Dispatch<SetStateAction<number>>) =>
     (e: ChangeEvent<HTMLInputElement>) => {
-      const value = parseFloat(e.target.value);
+      // Remove the "R$" prefix before validating the value
+      const value = parseFloat(e.target.value.replace("R$", "").trim());
 
+      // Validate the value and set it appropriately
       if (!isNaN(value)) {
         setter(value);
       } else {
-        setter(0);
+        setter(0); // Default or fallback value if the input is invalid
       }
     };
 
