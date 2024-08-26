@@ -92,6 +92,7 @@ function App() {
           Juros de Financiamento por ano (%)
         </label>
         <NumericFormat
+          suffix="%"
           decimalScale={2}
           fixedDecimalScale
           customInput={Input}
