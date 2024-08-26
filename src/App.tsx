@@ -19,28 +19,34 @@ import AthenaLogo from "@/assets/athena-logo.png";
 import { chartConfig } from "./utils/chartConfig";
 import InstagramIcon from "@/assets/instagram.svg";
 import { NumericFormat } from "react-number-format";
+import { formatToFloat } from "./utils/formatToFloat";
 import AthenaLogoMini from "@/assets/athena-logo-mini.png";
 import { useFinanceCalculator } from "./hooks/useFinanceCalculator";
 import { CustomTooltip } from "./components/CustomTooltip/CustomTooltip";
 import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
-import { formatToFloat } from "./utils/formatToFloat";
 
 function App() {
   const {
     entryValue,
     neededValue,
     handleSubmit,
+    collapseOpen,
     financingTerm,
     setEntryValue,
-    collapseOpen,
-    setCollapseOpen,
     chartDataTotal,
     setNeededValue,
+    setCollapseOpen,
     setFinancingTerm,
     financingInterest,
     handleInputChange,
     setFinancingInterest,
+    annualAdjustmentRate,
     chartDataInstallments,
+    administrationFeeRate,
+    setAnnualAdjustmentRate,
+    setAdministrationFeeRate,
+    methodologyAnnualAdjustmentRate,
+    methodologyAdministrationFeeRate,
   } = useFinanceCalculator();
 
   return (
@@ -92,12 +98,37 @@ function App() {
           Juros de Financiamento por ano (%)
         </label>
         <NumericFormat
+          suffix={"%"}
           decimalScale={2}
           fixedDecimalScale
           customInput={Input}
           decimalSeparator=","
           value={financingInterest}
           onValueChange={handleInputChange(setFinancingInterest)}
+        />
+        <label className="text-white mt-4 font-bold">
+          Taxa de administração do consórcio (%)
+        </label>
+        <NumericFormat
+          suffix={"%"}
+          decimalScale={2}
+          fixedDecimalScale
+          customInput={Input}
+          decimalSeparator=","
+          value={administrationFeeRate}
+          onValueChange={handleInputChange(setAdministrationFeeRate)}
+        />
+        <label className="text-white mt-4 font-bold">
+          Reajuste anual (INCC %)
+        </label>
+        <NumericFormat
+          suffix={"%"}
+          decimalScale={2}
+          fixedDecimalScale
+          customInput={Input}
+          decimalSeparator=","
+          value={annualAdjustmentRate}
+          onValueChange={handleInputChange(setAnnualAdjustmentRate)}
         />
         <Button
           type="submit"
@@ -225,11 +256,12 @@ function App() {
               de financiamento. Já no modelo SAC, que é o Sistema de Amortização
               Constante, o valor amortizado permanece o mesmo, resultando em
               parcelas que diminuem com o tempo. No consórcio, o prazo
-              considerado é de 180 meses, com uma taxa de administração de 20% e
-              um fundo de reserva de 3%, aplicados uma única vez sobre o valor
-              do bem. Além disso, o saldo devedor do consórcio é reajustado
-              anualmente em 2%, para preservar o poder de compra da carta ao
-              longo do tempo.
+              considerado é de 180 meses, com uma taxa de administração de{" "}
+              {methodologyAdministrationFeeRate}% e um fundo de reserva de 3%,
+              aplicados uma única vez sobre o valor do bem. Além disso, o saldo
+              devedor do consórcio é reajustado anualmente em{" "}
+              {methodologyAnnualAdjustmentRate}%, para preservar o poder de
+              compra da carta ao longo do tempo.
             </div>
             <div className="rounded-md border px-4 py-3 font-mono text-sm">
               Disclaimer: <br />

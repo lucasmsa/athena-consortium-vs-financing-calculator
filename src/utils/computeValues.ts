@@ -3,6 +3,8 @@ interface ComputeValues {
   entryValue: number; // This represents the initial entry payment.
   financingTerm: number;
   financingInterest: number;
+  annualAdjustmentRate: number;
+  administrationFeeRate: number;
 }
 
 export interface ChartDataTotal {
@@ -25,12 +27,12 @@ export const computeValues = ({
   entryValue,
   financingTerm,
   financingInterest,
+  annualAdjustmentRate,
+  administrationFeeRate,
 }: ComputeValues): {
   chartDataTotal: ChartDataTotal[];
   chartDataInstallments: ChartDataInstallments[];
 } => {
-  const administrationFeeRate = 0.23;
-  const annualAdjustmentRate = 1.02;
   const consortiumTerm = 180;
 
   // Subtract the entry value from the needed value to get the financed value.

@@ -12,17 +12,23 @@ interface UseFinanceCalculator {
   collapseOpen: boolean;
   financingTerm: number;
   financingInterest: number;
+  annualAdjustmentRate: number;
+  administrationFeeRate: number;
   chartDataTotal: ChartDataTotal[];
-  chartDataInstallments: ChartDataInstallments[];
+  methodologyAnnualAdjustmentRate: number;
+  methodologyAdministrationFeeRate: number;
   handleInputChange: (
     setter: Dispatch<SetStateAction<number>>
   ) => (value: NumberFormatValues) => void;
+  chartDataInstallments: ChartDataInstallments[];
   setCollapseOpen: Dispatch<SetStateAction<boolean>>;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setEntryValue: Dispatch<SetStateAction<number>>;
   setNeededValue: Dispatch<SetStateAction<number>>;
   setFinancingTerm: Dispatch<SetStateAction<number>>;
   setFinancingInterest: Dispatch<SetStateAction<number>>;
+  setAnnualAdjustmentRate: Dispatch<SetStateAction<number>>;
+  setAdministrationFeeRate: Dispatch<SetStateAction<number>>;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export const useFinanceCalculator = (): UseFinanceCalculator => {
@@ -31,7 +37,15 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
   const [neededValue, setNeededValue] = useState(100000);
   const [financingTerm, setFinancingTerm] = useState(120);
   const [financingInterest, setFinancingInterest] = useState(10);
+  const [annualAdjustmentRate, setAnnualAdjustmentRate] = useState(1.02);
+  const [administrationFeeRate, setAdministrationFeeRate] = useState(0.2);
   const [chartDataTotal, setChartDataTotal] = useState<ChartDataTotal[]>([]);
+  const [methodologyAnnualAdjustmentRate, setMethodologyAnnualAdjustmentRate] =
+    useState(annualAdjustmentRate);
+  const [
+    methodologyAdministrationFeeRate,
+    setMethodologyAdministrationFeeRate,
+  ] = useState(administrationFeeRate);
   const [chartDataInstallments, setChartDataInstallments] = useState<
     ChartDataInstallments[]
   >([]);
@@ -42,10 +56,14 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
       neededValue,
       financingTerm,
       financingInterest,
+      annualAdjustmentRate,
+      administrationFeeRate,
     });
 
     setChartDataTotal(chartDataTotal);
     setChartDataInstallments(chartDataInstallments);
+    setMethodologyAnnualAdjustmentRate(annualAdjustmentRate);
+    setMethodologyAdministrationFeeRate(administrationFeeRate);
   };
 
   useEffect(() => {
@@ -66,19 +84,25 @@ export const useFinanceCalculator = (): UseFinanceCalculator => {
   };
 
   return {
-    collapseOpen,
-    setCollapseOpen,
     entryValue,
     neededValue,
-    financingTerm,
-    financingInterest,
-    chartDataTotal,
-    chartDataInstallments,
-    handleInputChange,
     handleSubmit,
+    collapseOpen,
+    financingTerm,
     setEntryValue,
+    chartDataTotal,
     setNeededValue,
+    setCollapseOpen,
     setFinancingTerm,
+    handleInputChange,
+    financingInterest,
     setFinancingInterest,
+    annualAdjustmentRate,
+    chartDataInstallments,
+    administrationFeeRate,
+    setAnnualAdjustmentRate,
+    setAdministrationFeeRate,
+    methodologyAnnualAdjustmentRate,
+    methodologyAdministrationFeeRate,
   };
 };
