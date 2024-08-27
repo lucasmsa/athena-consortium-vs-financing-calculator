@@ -15,15 +15,15 @@ import {
 import { ChevronsUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import AthenaLogo from "@/assets/athena-logo.png";
+import AthenaLogo from "@/assets/athena-logo.svg";
 import { chartConfig } from "./utils/chartConfig";
 import InstagramIcon from "@/assets/instagram.svg";
 import { NumericFormat } from "react-number-format";
+import { formatToFloat } from "./utils/formatToFloat";
 import AthenaLogoMini from "@/assets/athena-logo-mini.png";
 import { useFinanceCalculator } from "./hooks/useFinanceCalculator";
 import { CustomTooltip } from "./components/CustomTooltip/CustomTooltip";
 import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
-import { formatToFloat } from "./utils/formatToFloat";
 
 function App() {
   const {
@@ -47,7 +47,7 @@ function App() {
     <>
       <header className="flex flex-1 bg-darkBlue h-12 border-b-[0.1px] border-cantaloupe-medium">
         <div className="w-max-width flex items-center px-4 mx-auto">
-          <img className="h-10 flex" src={AthenaLogo} />
+          <img className="h-24 translate-y-[-3px] flex" src={AthenaLogo} />
         </div>
       </header>
 
@@ -257,7 +257,7 @@ function App() {
             <span className="text-white text-sm">
               Copyright © Athena-BGA Investimentos 2022
             </span>
-            <img className="h-10 flex ml-4" src={AthenaLogoMini} />
+            <img className="h-28 flex ml-4" src={AthenaLogo} />
             <a href="https://www.instagram.com/athenainvestimentos/">
               <img
                 className="h-8 flex ml-4 cursor-pointer text-white mr-6"
