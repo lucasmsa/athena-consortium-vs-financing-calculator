@@ -20,7 +20,6 @@ import { chartConfig } from "./utils/chartConfig";
 import InstagramIcon from "@/assets/instagram.svg";
 import { NumericFormat } from "react-number-format";
 import { formatToFloat } from "./utils/formatToFloat";
-import AthenaLogoMini from "@/assets/athena-logo-mini.png";
 import { useFinanceCalculator } from "./hooks/useFinanceCalculator";
 import { CustomTooltip } from "./components/CustomTooltip/CustomTooltip";
 import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
